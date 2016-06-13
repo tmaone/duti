@@ -19,8 +19,7 @@ extern struct roles rtm[];
 int nroles;
 
 static void dump_cf_array(const void *value, void *context);
-static void dump_cf_dictionary(const void *key, const void *value,
-                               void *context);
+static void dump_cf_dictionary(const void *key, const void *value, void *context);
 
 int duti_is_conformant_uti(CFStringRef uti) {
   /*
@@ -31,15 +30,11 @@ int duti_is_conformant_uti(CFStringRef uti) {
    * we weren't running as a one-shot utility.
    */
 
-  if (UTTypeConformsTo(uti, kUTTypeItem) ||
-      UTTypeConformsTo(uti, kUTTypeContent) ||
-      UTTypeConformsTo(uti, kUTTypeMessage) ||
-      UTTypeConformsTo(uti, kUTTypeContact) ||
-      UTTypeConformsTo(uti, kUTTypeArchive)) {
-    return (1);
-  }
-
-  return (0);
+  return (UTTypeConformsTo(uti, kUTTypeItem) ||
+          UTTypeConformsTo(uti, kUTTypeContent) ||
+          UTTypeConformsTo(uti, kUTTypeMessage) ||
+          UTTypeConformsTo(uti, kUTTypeContact) ||
+          UTTypeConformsTo(uti, kUTTypeArchive));
 }
 
 int set_uti_handler(CFStringRef bid, CFStringRef type, LSRolesMask mask) {
@@ -58,7 +53,7 @@ int set_uti_handler(CFStringRef bid, CFStringRef type, LSRolesMask mask) {
 
   if (!duti_is_conformant_uti(type)) {
     fprintf(stderr, "%s does not conform to any UTI hierarchy\n", ct);
-    return (1);
+    return 1;
   }
 
   /* don't set handler if it's already set */
@@ -82,7 +77,7 @@ int set_uti_handler(CFStringRef bid, CFStringRef type, LSRolesMask mask) {
             cb, ct, (int)rc);
   }
 
-  return ((int)rc);
+  return (int)rc;
 }
 
 int set_url_handler(CFStringRef bid, CFStringRef url_scheme) {
@@ -118,7 +113,7 @@ int set_url_handler(CFStringRef bid, CFStringRef url_scheme) {
             cb, cu, (int)rc);
   }
 
-  return ((int)rc);
+  return (int)rc;
 }
 
 int fsethandler(char *spath) {
@@ -132,7 +127,7 @@ int fsethandler(char *spath) {
   if (spath != NULL) {
     if ((f = fopen(spath, "r")) == NULL) {
       fprintf(stderr, "fopen %s: %s\n", spath, strerror(errno));
-      return (1);
+      return 1;
     }
   } else {
     f = stdin;
@@ -160,12 +155,10 @@ int fsethandler(char *spath) {
         type = lineav[1];
         role = lineav[2];
         break;
-
       case DUTI_TYPE_URL_HANDLER:
         handler = lineav[0];
         type = lineav[1];
         break;
-
       default:
         fprintf(stderr, "line %d: parsing failed\n", linenum);
         rc = 1;
@@ -187,7 +180,7 @@ int fsethandler(char *spath) {
     rc = 1;
   }
 
-  return (rc);
+  return rc;
 }
 
 int psethandler(char *spath) {
@@ -204,23 +197,23 @@ int psethandler(char *spath) {
 
   if (!spath) {
     fprintf(stderr, "%s: invalid argument supplied\n", __FUNCTION__);
-    return (1);
+    return 1;
   }
 
   if (read_plist(spath, &plist) != 0) {
     fprintf(stderr, "%s: failed to read plist\n", __FUNCTION__);
-    return (1);
+    return 1;
   }
 
   if (!plist) {
     fprintf(stderr, "%s: Invalid plist\n", __FUNCTION__);
-    return (1);
+    return 1;
   }
 
   if ((dharray = CFDictionaryGetValue(plist, DUTI_KEY_SETTINGS)) == NULL) {
     fprintf(stderr, "%s is missing the settings array\n", spath);
     CFRelease(plist);
-    return (1);
+    return 1;
   }
 
   count = CFArrayGetCount(dharray);
@@ -283,7 +276,7 @@ int psethandler(char *spath) {
     CFRelease(plist);
   }
 
-  return (rc);
+  return rc;
 }
 
 int dirsethandler(char *dirpath) {
@@ -358,7 +351,7 @@ int dirsethandler(char *dirpath) {
     free(cur);
   }
 
-  return (rc);
+  return rc;
 }
 
 int uti_handler_show(char *uti, int showall) {
@@ -371,11 +364,11 @@ int uti_handler_show(char *uti, int showall) {
 
   if (uti == NULL) {
     fprintf(stderr, "Invalid UTI.\n");
-    return (2);
+    return 2;
   }
 
   if (c2cf(uti, &cfuti) != 0) {
-    return (2);
+    return 2;
   }
 
   if (showall) {
@@ -436,7 +429,7 @@ uti_show_done:
     CFRelease(cfhandler);
   }
 
-  return (rc);
+  return rc;
 }
 
 int duti_handler_set(char *bid, char *type, char *role) {
@@ -454,7 +447,7 @@ int duti_handler_set(char *bid, char *type, char *role) {
     }
     if (i >= nroles) {
       fprintf(stderr, "role \"%s\" unrecognized\n", role);
-      return (2);
+      return 2;
     }
   }
 
@@ -540,7 +533,7 @@ duti_set_cleanup:
     CFRelease(preferredUTI);
   }
 
-  return (rc);
+  return rc;
 }
 
 /*
@@ -567,11 +560,11 @@ int duti_default_app_for_extension(char *ext) {
     rext++;
     if (*rext == '\0') {
       fprintf(stderr, "no extension provided\n");
-      return (rc);
+      return rc;
     }
   }
   if (c2cf(rext, &cf_ext) != 0) {
-    return (rc);
+    return rc;
   }
 
   err = LSGetApplicationForInfo(kLSUnknownType, kLSUnknownCreator, cf_ext,
@@ -633,7 +626,7 @@ duti_extension_cleanup:
     CFRelease(cf_app_name);
   }
 
-  return (rc);
+  return rc;
 }
 
 int duti_utis(char *uti) {
@@ -645,11 +638,11 @@ int duti_utis(char *uti) {
 
   if (uti == NULL) {
     fprintf(stderr, "Invalid UTI.\n");
-    return (rc);
+    return rc;
   }
 
   if (c2cf(uti, &cf_uti_identifier) != 0) {
-    return (rc);
+    return rc;
   }
 
   cf_uti_description = UTTypeCopyDescription(cf_uti_identifier);
@@ -701,11 +694,11 @@ int duti_utis_for_extension(char *ext) {
     rext++;
     if (*rext == '\0') {
       fprintf(stderr, "no extension provided\n");
-      return (rc);
+      return rc;
     }
   }
   if (c2cf(rext, &cf_ext) != 0) {
-    return (rc);
+    return rc;
   }
 
   cf_array = UTTypeCreateAllIdentifiersForTag(kUTTagClassFilenameExtension,
@@ -750,7 +743,7 @@ duti_utis_cleanup:
     CFRelease(cf_uti_declaration);
   }
 
-  return (rc);
+  return rc;
 }
 
 static void dump_cf_array(const void *value, void *context) {
