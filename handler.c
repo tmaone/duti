@@ -288,9 +288,8 @@ int psethandler(char *spath) {
 
 int dirsethandler(char *dirpath) {
   DIR *d = NULL;
-  struct dirent *de;
   struct ll *head = NULL;
-  struct ll *cur, *tmp;
+  struct ll *tmp;
   struct stat st;
   char path[MAXPATHLEN];
   char *p;
@@ -302,6 +301,7 @@ int dirsethandler(char *dirpath) {
     exit(2);
   }
 
+  struct dirent *de;
   while ((de = readdir(d)) != NULL) {
     if (de->d_name[0] == '.') {
       continue;
@@ -337,6 +337,7 @@ int dirsethandler(char *dirpath) {
     rc = 1;
   }
 
+  struct ll *cur;
   for (cur = head; cur != NULL; cur = tmp) {
     dhandler_f = fsethandler;
     if ((p = strrchr(cur->l_path, '.')) != NULL) {
