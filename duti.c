@@ -17,18 +17,19 @@ extern int nroles;
 int verbose = 0;
 
 struct roles rtm[] = {
-    {"none", kLSRolesNone},     {"viewer", kLSRolesViewer},
-    {"editor", kLSRolesEditor}, {"shell", kLSRolesShell},
+    {"none", kLSRolesNone},
+    {"viewer", kLSRolesViewer},
+    {"editor", kLSRolesEditor},
+    {"shell", kLSRolesShell},
     {"all", kLSRolesAll},
 };
 
 int main(int ac, char *av[]) {
-  struct stat st;
-  int c, err = 0;
-  int set = 0;
+  struct stat st = {0};
+  int c, err, set = 0;
   int (*handler_f)(char *);
   char *path = NULL;
-  char *p;
+  char *p = NULL;
 
   extern int optind;
   extern char *optarg;
@@ -77,26 +78,22 @@ int main(int ac, char *av[]) {
         err++;
       }
       break;
-
     case 1: /* read from file or directory */
       if (set) {
         err++;
       }
       path = av[optind];
       break;
-
     case 2: /* set URI handler */
       if (set) {
         return (duti_handler_set(av[optind], av[optind + 1], NULL));
       }
-    /* this fallthrough works because set == 0 */
-
+      /* this fallthrough works because set == 0 */
     case 3: /* set UTI handler */
       if (set) {
         return (duti_handler_set(av[optind], av[optind + 1], av[optind + 2]));
       }
-    /* fallthrough to error */
-
+      /* fallthrough to error */
     default: /* error */
       err++;
       break;
