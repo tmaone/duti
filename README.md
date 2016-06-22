@@ -13,6 +13,7 @@ You'll need to have [GNU autoconf](https://www.gnu.org/software/autoconf) instal
 # Usage
 
 duti can read settings from four different sources:
+
 1) standard input
 
 2) a settings file
