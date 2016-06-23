@@ -39,14 +39,17 @@ AC_DEFUN([DUTI_CHECK_SDK],
 	    sdk_path="${sdk_path}/MacOSX10.10.sdk"
 	    macosx_arches=""
 	    ;;
+
 	darwin15*)
 	    sdk_path="${sdk_path}/MacOSX10.11.sdk"
 	    macosx_arches=""
 	    ;;
-  darwin16*)
-      sdk_path="${sdk_path}/MacOSX10.12.sdk"
-      macosx_arches=""
+
+	darwin16*)
+	    sdk_path="${sdk_path}/MacOSX10.12.sdk"
+	    macosx_arches=""
 	    ;;
+
 	*)
 	    AC_MSG_ERROR([${host_os} is not a supported system])
     esac
