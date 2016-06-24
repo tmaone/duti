@@ -1,8 +1,0 @@
-.cvsignore
-.gitignore
-.git
-CVS
-EXCLUDE
-Makefile
-config.log
-config.status
