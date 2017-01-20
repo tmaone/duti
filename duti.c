@@ -12,7 +12,6 @@
 
 #include "handler.h"
 
-extern char *duti_version;
 extern int nroles;
 int verbose = 0;
 
@@ -26,7 +25,7 @@ struct roles rtm[] = {
 
 int main(int ac, char *av[]) {
   struct stat st = {0};
-  int c, err, set = 0;
+  int c = 0, err = 0, set = 0;
   int (*handler_f)(char *);
   char *path = NULL;
   char *p = NULL;
@@ -58,7 +57,7 @@ int main(int ac, char *av[]) {
         return (duti_utis(optarg));
 
       case 'V': /* version */
-        printf("%s\n", duti_version);
+        printf("%s\n", DUTI_VERSION);
         exit(0);
 
       case 'v': /* verbose */

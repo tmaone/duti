@@ -3,10 +3,6 @@ duti is a command-line utility capable of setting default applications for vario
 
 
 # Compiling
-You'll need to have [GNU autoconf](https://www.gnu.org/software/autoconf) installed. From the source directory, run:
-
-	autoconf
-    ./configure
     make
     sudo make install
 

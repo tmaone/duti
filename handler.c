@@ -58,12 +58,13 @@ int set_uti_handler(CFStringRef bid, CFStringRef type, LSRolesMask mask) {
 
   /* don't set handler if it's already set */
   CFStringRef cur_bid = LSCopyDefaultRoleHandlerForContentType(type, mask);
-  if (CFStringCompare(bid, cur_bid, kCFCompareCaseInsensitive) ==
-      kCFCompareEqualTo) {
+  if (cur_bid) {
+    if (CFStringCompare(bid, cur_bid, kCFCompareCaseInsensitive) == kCFCompareEqualTo) {
+      CFRelease(cur_bid);
+      return noErr;
+    }
     CFRelease(cur_bid);
-    return noErr;
   }
-  CFRelease(cur_bid);
 
   if (verbose) {
     printf("setting %s as handler for %s\n", cb, ct);
@@ -94,12 +95,13 @@ int set_url_handler(CFStringRef bid, CFStringRef url_scheme) {
 
   /* don't set handler if it's already set */
   CFStringRef cur_bid = LSCopyDefaultHandlerForURLScheme(url_scheme);
-  if (CFStringCompare(bid, cur_bid, kCFCompareCaseInsensitive) ==
-      kCFCompareEqualTo) {
+  if (cur_bid) {
+    if (CFStringCompare(bid, cur_bid, kCFCompareCaseInsensitive) == kCFCompareEqualTo) {
+      CFRelease(cur_bid);
+      return noErr;
+    }
     CFRelease(cur_bid);
-    return noErr;
   }
-  CFRelease(cur_bid);
 
   if (verbose) {
     printf("setting %s as handler for %s:// URLs\n", cb, cu);
